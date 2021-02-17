@@ -21,6 +21,11 @@ function init() {
             "create department",
             "create role",
             "create employees",
+            "view departments",
+            "view roles",
+            "view employees",
+
+
         ]
 
     }]).then((answer) => {
@@ -35,6 +40,15 @@ function init() {
             case "create employees":
                 createEmployees()
                 break;
+            case "view departments":
+                viewDepartments()
+                break;
+            case "view roles":
+                viewRoles()
+                break
+            case "view employees":
+                viewEmployees()
+                break
 
         }
     })
@@ -140,4 +154,25 @@ function createEmployees() {
         })
     })
 
+}
+
+function viewDepartments() {
+    connection.query("select * from departments", (err, results) => {
+        console.table(results)
+        init()
+    })
+}
+
+function viewRoles() {
+    connection.query("select * from roles", (err, results) => {
+        console.table(results)
+        init()
+    })
+}
+
+function viewEmployees() {
+    connection.query("select * from employees", (err, results) => {
+        console.table(results)
+        init()
+    })
 }
