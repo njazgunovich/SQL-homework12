@@ -24,6 +24,9 @@ function init() {
             "view departments",
             "view roles",
             "view employees",
+            "update employee",
+
+
 
 
         ]
@@ -49,6 +52,10 @@ function init() {
             case "view employees":
                 viewEmployees()
                 break
+            case "update employee":
+                updateEmployee()
+                break
+
 
         }
     })
@@ -174,5 +181,37 @@ function viewEmployees() {
     connection.query("select * from employees", (err, results) => {
         console.table(results)
         init()
+    })
+}
+
+function updateEmployee() {
+    connection.query("select * from employees", (err, employees) => {
+        connection.query("select * from roles", (err, roles) => {
+            inquirer.prompt([{
+                type: "list",
+                name: "employeeId",
+                message: "choose employee to update",
+                choices: employees.map((employee) => {
+                    return {
+                        name: `${employee.first_name} ${employee.last_name}`,
+                        value: employee.id
+                    }
+                })
+            }, {
+                type: "list",
+                name: "newRoleId",
+                message: "choose new role",
+                choices: roles.map((role) => {
+                    return {
+                        name: `${role.title}`,
+                        value: role.id
+                    }
+                })
+            }]).then((answers) => {
+                connection.query(`update employees set role_id=${answers.newRoleId} where id=${answers.employeeId}`)
+                init()
+            })
+        })
+
     })
 }
